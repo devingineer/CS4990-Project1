@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Progress -->
+<div class="d-flex justify-content-between align-items-center mb-1">
+  <small class="text-muted">Question {{ idx + 1 }} of {{ n }}</small>
+  <small class="text-muted">{{ pct }}% complete</small>
+</div>
+<div class="progress mb-4" style="height: 6px;">
+  <div class="progress-bar bg-primary" role="progressbar"
+       style="width: {{ pct }}%;" aria-valuenow="{{ pct }}"
+       aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+
+<!-- Figure -->
+<div class="card shadow-sm border-0 mb-4">
+  <img src="/figures/{{ fig }}" class="img-fluid rounded" alt="Study figure {{ idx + 1 }}">
+</div>
+
+<!-- Question -->
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4">
+
+        <h5 class="card-title fw-semibold mb-4">{{ q.prompt }}</h5>
+
+        <form method="POST" id="qform">
+          {% for c in q.choices %}
+          <div class="mb-2">
+            <input type="radio" class="btn-check" name="choice"
+                   id="choice{{ loop.index }}" value="{{ c }}"
+                   onchange="enableSubmit()" autocomplete="off">
+            <label class="btn btn-outline-secondary w-100 text-start px-3 py-2"
+                   for="choice{{ loop.index }}">
+              {{ c }}
+            </label>
+          </div>
+          {% endfor %}
+
+          <button type="submit" class="btn btn-primary w-100 mt-3 py-2"
+                  id="submitBtn" disabled>
+            Submit Answer &nbsp;→
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function enableSubmit() {
+    document.getElementById("submitBtn").disabled = false;
+  }
+</script>
+{% endblock %}

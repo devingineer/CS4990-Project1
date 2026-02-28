@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-sm-10 col-md-7 col-lg-5">
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-5 text-center">
+
+        <div class="mb-4">
+          <span style="font-size:2.5rem;">📊</span>
+        </div>
+
+        <h2 class="fw-bold mb-2">Welcome</h2>
+        <p class="text-muted mb-4">
+          You will be shown <strong>{{ n }} data visualizations</strong> and asked
+          one question about each one.
+        </p>
+
+        <ul class="list-unstyled text-start mb-4 mx-auto" style="max-width:260px">
+          <li class="mb-2">
+            <span class="text-success fw-bold me-2">✓</span> One question per figure
+          </li>
+          <li class="mb-2">
+            <span class="text-success fw-bold me-2">✓</span> No time limit
+          </li>
+          <li class="mb-2">
+            <span class="text-success fw-bold me-2">✓</span> Responses are anonymous
+          </li>
+        </ul>
+
+        <form method="POST" action="/start">
+          <button type="submit" class="btn btn-primary btn-lg w-100 py-3">
+            Begin Survey &nbsp;→
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

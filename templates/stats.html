@@ -2,6 +2,42 @@
 {% block content %}
 <h4 class="fw-bold mb-4">Response Stats</h4>
 
+<!-- Per-figure accuracy table -->
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0" style="font-size:.85rem; white-space:nowrap;">
+      <thead class="table-dark">
+        <tr>
+          <th class="px-4 py-3">Figure</th>
+          <th class="px-4 py-3">Question</th>
+          <th class="px-3 py-3 text-center">Correct</th>
+          <th class="px-3 py-3 text-center">Responses</th>
+          <th class="px-3 py-3 text-center">Accuracy</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in fig_stats %}
+        <tr>
+          <td class="px-4 py-2 font-monospace">{{ s.figure | replace(".png","") }}</td>
+          <td class="px-4 py-2 text-muted" style="white-space:normal; max-width:360px;">{{ s.question }}</td>
+          <td class="px-3 py-2 text-center">{{ s.correct }}</td>
+          <td class="px-3 py-2 text-center">{{ s.total }}</td>
+          <td class="px-3 py-2 text-center fw-bold">
+            {% if s.accuracy is not none %}{{ s.accuracy }}%{% else %}—{% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="5" class="text-center text-muted py-4">No responses yet.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<h5 class="fw-bold mb-3">Individual Responses</h5>
+
 <div class="card shadow-sm border-0" style="overflow-x:auto;">
   <div class="card-body p-0">
     <table class="table table-hover mb-0" style="font-size:.85rem; white-space:nowrap;">
@@ -14,6 +50,7 @@
             {{ fig | replace(".png","") }}
           </th>
           {% endfor %}
+          <th class="px-3 py-3 text-center">Correct</th>
         </tr>
       </thead>
       <tbody>
@@ -24,10 +61,11 @@
           {% for answer in p["answers"] %}
           <td class="px-3 py-2 text-center">{{ answer }}</td>
           {% endfor %}
+          <td class="px-3 py-2 text-center fw-bold">{{ p["correct"] }}</td>
         </tr>
         {% else %}
         <tr>
-          <td colspan="{{ 2 + figures | length }}" class="text-center text-muted py-4">
+          <td colspan="{{ 3 + figures | length }}" class="text-center text-muted py-4">
             No responses yet.
           </td>
         </tr>

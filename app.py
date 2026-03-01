@@ -1,4 +1,5 @@
 import os
+import random
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
@@ -16,7 +17,7 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 
 # ── Questions ─────────────────────────────────────────────────────────────────
 QUESTIONS = {
-    "Devin-Figure1.png": {
+    "Devin-Figure1-NoAids.png": {
         "prompt": "Does Kit Kat have approximately more or less than 35% sugar?",
         "choices": ["More", "Less", "About 35%"],
         "correct": "Less",
@@ -30,6 +31,21 @@ QUESTIONS = {
         "prompt": "Is there a larger gap in sugar percentage between Peanut Butter Cup and Milky Way, or between Peanut Butter Cup and Twix?",
         "choices": ["Peanut Butter Cup and Milky Way", "Peanut Butter Cup and Twix", "The gap is about the same"],
         "correct": "Peanut Butter Cup and Milky Way",
+    },
+    "Tim-Figure1-NoAids.png": {
+        "prompt": "What is the average win percent of pluribus candy?",
+        "choices": ["55%", "45%", "35%", "60%"],
+        "correct": "45%",
+    },
+    "Tim-Figure2.png": {
+        "prompt": "Which Candy is closest to 60% win percent?",
+        "choices": ["Bar", "Chocolate", "Nougat", "Caramel"],
+        "correct": "Nougat",
+    },
+    "Tim-Figure3.png": {
+        "prompt": "What is the win percent difference between fruity and hard candy?",
+        "choices": ["5%", "10%", "20%", "30%"],
+        "correct": "5%",
     },
 }
 
@@ -140,14 +156,17 @@ def home():
 
 @app.route("/start", methods=["POST"])
 def start():
+    figs = list_figures()
+    random.shuffle(figs)
     session["user_id"] = os.urandom(8).hex()
     session["idx"] = 0
+    session["figs"] = figs
     return redirect(url_for("survey"))
 
 
 @app.route("/survey", methods=["GET", "POST"])
 def survey():
-    figs = list_figures()
+    figs = session.get("figs") or list_figures()
     idx  = session.get("idx", 0)
 
     if idx >= len(figs):
@@ -190,23 +209,49 @@ def stats():
     raw = fetch_responses()
     user_answers = {}   # {user_id: {figure: choice}}
     user_first_ts = {}  # {user_id: earliest ts} for row ordering
+    user_correct  = {}  # {user_id: correct count}
     for r in raw:
         uid = r["user_id"]
         if uid not in user_answers:
             user_answers[uid] = {}
             user_first_ts[uid] = r["ts"]
+            user_correct[uid]  = 0
         user_answers[uid][r["figure"]] = r["choice"]
+        if r["is_correct"]:
+            user_correct[uid] += 1
 
     pivot = [
         {
             "user_id": uid[:8],
             "ts": user_first_ts[uid][:19].replace("T", " "),
             "answers": [user_answers[uid].get(fig, "—") for fig in figures],
+            "correct": user_correct[uid],
         }
         for uid in sorted(user_answers, key=lambda u: user_first_ts[u])
     ]
 
-    return render_template("stats.html", figures=figures, pivot=pivot)
+    # Per-figure accuracy summary
+    fig_totals  = {fig: 0 for fig in figures}
+    fig_correct = {fig: 0 for fig in figures}
+    for r in raw:
+        fig = r["figure"]
+        if fig in fig_totals:
+            fig_totals[fig] += 1
+            if r["is_correct"]:
+                fig_correct[fig] += 1
+
+    fig_stats = [
+        {
+            "figure":   fig,
+            "question": QUESTIONS.get(fig, DEFAULT_QUESTION)["prompt"],
+            "correct":  fig_correct[fig],
+            "total":    fig_totals[fig],
+            "accuracy": round(fig_correct[fig] / fig_totals[fig] * 100, 1) if fig_totals[fig] else None,
+        }
+        for fig in figures
+    ]
+
+    return render_template("stats.html", figures=figures, pivot=pivot, fig_stats=fig_stats)
 
 
 if __name__ == "__main__":

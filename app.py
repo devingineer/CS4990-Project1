@@ -50,11 +50,11 @@ QUESTIONS = {
     "Donovan-Figure1-NoAids.png": {
         "prompt": "What sugar has the highest average Price Percentage?",
         "choices": ["Low", "Medium", "High", "All Equal"],
-        "correct": "High",
+        "correct": "Medium",
     },
     "Donovan-Figure2.png": {
         "prompt": "What is the Average Price Percentage of High Sugar candies?",
-        "choices": ["0.35", "0.42", "0.8", "0.51"],
+        "choices": ["0.35", "0.45", "0.8", "0.51"],
         "correct": "0.51",
     },
     "Donovan-Figure3.png": {

@@ -28,9 +28,9 @@ QUESTIONS = {
         "correct": "~8%",
     },
     "Devin-Figure3.png": {
-        "prompt": "Is there a larger gap in sugar percentage between Peanut Butter Cup and Milky Way, or between Peanut Butter Cup and Twix?",
-        "choices": ["Peanut Butter Cup and Milky Way", "Peanut Butter Cup and Twix", "The gap is about the same"],
-        "correct": "Peanut Butter Cup and Milky Way",
+        "prompt": "Is there a larger gap in sugar percentage between Milky Way and Twix, or between Milky Way and Snickers?",
+        "choices": ["Milky Way and Twix", "Milky Way and Snickers", "The gap is about the same"],
+        "correct": "Milky Way and Snickers",
     },
     "Tim-Figure1-NoAids.png": {
         "prompt": "What is the average win percent of pluribus candy?",
@@ -46,6 +46,36 @@ QUESTIONS = {
         "prompt": "What is the win percent difference between fruity and hard candy?",
         "choices": ["5%", "10%", "20%", "30%"],
         "correct": "5%",
+    },
+    "Donovan-Figure1-NoAids.png": {
+        "prompt": "What sugar has the highest average Price Percentage?",
+        "choices": ["Low", "Medium", "High", "All Equal"],
+        "correct": "High",
+    },
+    "Donovan-Figure2.png": {
+        "prompt": "What is the Average Price Percentage of High Sugar candies?",
+        "choices": ["0.35", "0.42", "0.8", "0.51"],
+        "correct": "0.51",
+    },
+    "Donovan-Figure3.png": {
+        "prompt": "What is the Approximate difference between low and high sugar candies?",
+        "choices": ["No Difference", "0.25", "0.03", "0.5"],
+        "correct": "0.25",
+    },
+    "Branden-Figure1-NoAids.png": {
+        "prompt": "Which sugar category has the highest average popularity?",
+        "choices": ["Low sugar", "Medium sugar", "High sugar", "All are equal"],
+        "correct": "Medium sugar",
+    },
+    "Branden-Figure2.png": {
+        "prompt": "Medium sugar candies are approximately",
+        "choices": ["Below 50%", "Exactly 50%", "Slightly above 50%", "Above 70%"],
+        "correct": "Slightly above 50%",
+    },
+    "Branden-Figure3.png": {
+        "prompt": "About how much higher is Medium sugar compared to High sugar?",
+        "choices": ["1-2%", "5-6%", "10%", "20%"],
+        "correct": "1-2%",
     },
 }
 
